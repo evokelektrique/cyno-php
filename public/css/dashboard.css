@@ -1,0 +1,28 @@
+@import url('reset.css');
+
+#share_options_menu_button:hover #share_options_menu,
+#share_options_menu_button:active #share_options_menu {
+	display: block;
+}
+#share_options_menu {
+	position: absolute;
+	top: 45px;
+	display: none;
+}
+#share_options_menu:before {
+	position: absolute;
+    top: -23px;
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    width: 100%;
+    font-size: 25px;
+    height: auto;
+    background: transparent;
+    content: "\f0d8";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+.table td, .table th {
+    vertical-align: middle !important;
+}

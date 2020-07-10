@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'vazir';
+  src: url('../fonts/Vazir.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/Vazir.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/Vazir.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/Vazir.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+
+/* Font Settings */
+.is-size-1 {
+	line-height: 4.5rem;
+}
+body, button, input, select, textarea {
+    font-family: vazir;
+}
