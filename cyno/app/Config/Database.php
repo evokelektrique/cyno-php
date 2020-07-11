@@ -54,9 +54,9 @@ class Database extends \CodeIgniter\Database\Config
 	public $production = [
 		'DSN'      => '',
 		'hostname' => 'localhost',
-		'username' => 'cynoir_root',
-		'password' => '1.Programmer@3412!1',
-		'database' => 'cynoir_db',
+		'username' => '',
+		'password' => '',
+		'database' => '',
 		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
