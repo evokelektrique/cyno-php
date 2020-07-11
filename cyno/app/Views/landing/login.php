@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/Authentication') ?>
+<?= $this->extend('layouts/authentication') ?>
 	<?php if($session->has('alert')):?>
 		<?= var_dump($session->alert) ?>
 	<?php endif; ?>

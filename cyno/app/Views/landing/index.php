@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/Landing') ?>
+<?= $this->extend('layouts/landing') ?>
 
 <?= $this->section('wrapper') ?>
 <div class="container">
