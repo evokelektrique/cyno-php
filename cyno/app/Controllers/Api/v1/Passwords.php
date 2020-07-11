@@ -63,6 +63,7 @@ class Passwords extends ApiController {
 		$shared_passwords = $this->shared_model
 			->select(['id', 'user_id', 'hash_id', 'hash', 'inputs_hash', 'inputs_preimage_hash', 'nonce', 'cipher', 'created_at'])
 			->where('receiver_id', $this->user->user_id)
+			->where('website_id', $website->id)
 			->findAll();
 
 		foreach($single_passwords as &$single_password) {

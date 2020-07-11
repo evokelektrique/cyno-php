@@ -8,21 +8,32 @@
 		</div>
 	</div>
 
-
+	<?php if($session->user['is_logged_in']): ?>	
 	<div class="navbar-end">
-
-	<?php 
-		// Router
-		$router = service('router'); 
-		if($router->controllerName() === "\App\Controllers\Landing"):
-	?>
+		<?php 
+			// Router
+			$router = service('router'); 
+			if($router->controllerName() === "\App\Controllers\Landing"):
+		?>
+		<a class="navbar-item" href="<?= base_url(route_to('dashboard')) ?>">
+			<?= lang('cyno.dashboard') ?>
+		</a>
+		<?php endif; ?>
+	</div>
+	<?php else: ?>
+	<div class="navbar-end">
+		<?php 
+			// Router
+			$router = service('router'); 
+			if($router->controllerName() === "\App\Controllers\Landing"):
+		?>
 		<a class="navbar-item" href="<?= base_url(route_to('user_login')) ?>">
 			<?= lang('cyno.login') ?>
 		</a>
 		<a class="navbar-item" href="<?= base_url(route_to('user_register')) ?>">
 			<?= lang('cyno.register') ?>
 		</a>
-	<?php endif; ?>
-
+		<?php endif; ?>
 	</div>
+	<?php endif; ?>
 </nav>

@@ -364,7 +364,7 @@ class Passwords extends BaseController {
 					base64_decode($password->cipher),
 					$data->masterkey_ad,
 					base64_decode($password->nonce),
-					base64_decode($data->key),
+					base64_decode($data->key)
 				);
 				echo json_encode(['decrypted' => $decrypted]);
 			} else {
