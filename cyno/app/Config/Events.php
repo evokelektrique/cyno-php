@@ -83,7 +83,7 @@ Events::on('user_registration', function ($data) {
 	        $mail->Username = 'noreply@cyno.ir';
 	        $mail->Password = '1.Programmer@3412!1';
 	        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-	        $mail->Port = 465;
+	        $mail->Port = 587;
 
 	        $mail->setFrom('noreply@cyno.ir', 'Cyno');
 	        $mail->addAddress($data['email']);
