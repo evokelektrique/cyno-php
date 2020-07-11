@@ -78,14 +78,14 @@ Events::on('user_registration', function ($data) {
 	        // Server settings
 	        // $mail->SMTPDebug = SMTP::DEBUG_OFF;
 	        $mail->isSMTP();
-	        $mail->Host = 'mail.evoke.webdata.co';
+	        $mail->Host = 'mail.cyno.ir';
 	        $mail->SMTPAuth = true;
-	        $mail->Username = 'test@evoke.webdata.co';
-	        $mail->Password = '$%yVj;2_}6w;';
+	        $mail->Username = 'noreply@cyno.ir';
+	        $mail->Password = '1.Programmer@3412!1';
 	        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-	        $mail->Port = 587;
+	        $mail->Port = 465;
 
-	        $mail->setFrom('test@evoke.webdata.co', 'Cyno');
+	        $mail->setFrom('noreply@cyno.ir', 'Cyno');
 	        $mail->addAddress($data['email']);
 	        $mail->isHTML(true);
 

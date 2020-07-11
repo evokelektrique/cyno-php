@@ -8,7 +8,6 @@ class Login extends BaseController {
 		$data = [
 			'session' => session()
 		];
-		var_dump(ENVIRONMENT);
 		return view('landing/login', $data);
 	}
 
