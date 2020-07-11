@@ -16,4 +16,4 @@ pipelines:
          # - composer install
          # - vendor/bin/phpunit
           - apt-get -qq install git-ftp
-          - git ftp push --user $FTP_USERNAME --passwd $FTP_PASSWORD ftp://ftp.cyno.ir
+          - git ftp init --user $FTP_USERNAME --passwd $FTP_PASSWORD ftp://ftp.cyno.ir
