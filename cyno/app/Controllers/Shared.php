@@ -94,7 +94,7 @@ class Shared extends BaseController {
 		try {	
 			if($this->request->isAjax()) {
 				// Input data
-				$input_data 	= $this->request->getJSON();
+				$input_data = $this->request->getJSON();
 
 				// Receiver user
 				$receiver_user 	= $this->user_model
@@ -114,15 +114,15 @@ class Shared extends BaseController {
 
 				// Insertion Data
 				$model_data = [
-					'cipher' 				=> $input_data->cipher,
-					'nonce' 				=> $input_data->nonce,
-					'user_id' 				=> $this->session->user['id'],
-					'receiver_id' 			=> $receiver_user->id,
-					'website_id'  			=> $password->website_id,
-					'title'  				=> $password->title,
-					'hash' 					=> $password->hash,
-					'inputs_hash'  			=> $password->inputs_hash,
-					'inputs_preimage_hash'  => $password->inputs_preimage_hash,
+					'cipher'               => $input_data->cipher,
+					'nonce'                => $input_data->nonce,
+					'user_id'              => $this->session->user['id'],
+					'receiver_id'          => $receiver_user->id,
+					'website_id'           => $password->website_id,
+					'title'                => $password->title,
+					'hash'                 => $password->hash,
+					'inputs_hash'          => $password->inputs_hash,
+					'inputs_preimage_hash' => $password->inputs_preimage_hash,
 				];
 
 				// Insertion ID
@@ -131,11 +131,11 @@ class Shared extends BaseController {
 				if($insert_id) {
 					// Sending Response
 					$response   = [
-						'cipher' 		=> $input_data->cipher,
-						'nonce' 		=> $input_data->nonce,
-						'user_id' 		=> $this->session->user['id'],
-						'receiver_id' 	=> $receiver_user->id,
-						'csrf' 			=> csrf_hash()
+						'cipher'      => $input_data->cipher,
+						'nonce'       => $input_data->nonce,
+						'user_id'     => $this->session->user['id'],
+						'receiver_id' => $receiver_user->id,
+						'csrf'        => csrf_hash()
 	 				];
 					return json_encode($response);
 				} else { // Fail condition
@@ -216,6 +216,73 @@ class Shared extends BaseController {
 			return json_encode(['status' => 'fail', 'message' => 'not ajax']);
 		}
 	}
+
+	public function edit($hash_id) {
+		// Decode ID
+		$id = $this->hashids->decode($hash_id);
+
+		// Find Password
+		$password = $this->model
+			->where('user_id', $this->session->user['id'])
+			->where('id', $id)
+			->first();
+
+		// Find receiver User
+		$receiver_user = $this->user_model->where('id', $password->receiver_id)->first();
+		
+		// Password Not Found
+		if(empty($password)) {
+			return $this->response->setStatusCode(404, 'Password Not Found');
+		}
+
+		$data = [
+			'session'     => $this->session,
+			'password'    => $password,
+			'receiver_user' => $receiver_user,
+		];
+		return view('dashboard/shared/edit', $data);
+	}
+
+	// Update Shared Password
+	public function update() {
+		try {
+			// Get Incomming Post Data
+			$input_data = $this->request->getJSON();
+			
+			// Decode ID
+			$id = $this->hashids->decode($input_data->password_id);
+			
+			// Find Password
+			$password = $this->model
+				->where('user_id', $this->session->user['id'])
+				->where('id', $id)
+				->first();
+				
+			// Password Not Found
+			if(empty($password)) {
+				return json_encode(['message' => 'Password Not Found']);
+			}
+
+			// Update Password
+			$updated_passsword = $this->model
+				->set([
+					'cipher' => $input_data->cipher,
+					'nonce'  => $input_data->nonce
+				])
+				->where('id', $id)
+				->update();
+				
+			if($updated_passsword) {
+				return json_encode(['status' => 1, 'message' => 'Password Updated', 'password' => $updated_passsword]);
+			}
+			return json_encode(['status' => 0, 'message' => 'Password Not Updated']);
+		} catch(\Exception $e) {
+			die($e);
+		}
+	}
+
+
+
 
 }
 

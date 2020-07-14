@@ -14,3 +14,7 @@
 body, button, input, select, textarea {
     font-family: vazir;
 }
+
+.align-baseline {
+  vertical-align: baseline;
+}

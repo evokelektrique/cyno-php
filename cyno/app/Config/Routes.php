@@ -93,6 +93,7 @@ $routes->group('auth', function ($routes) {
 
     // Email
     $routes->get('validate_email/(:hash)', 'Email::validate_email/$1', ['as' => 'user_validate_email']);
+    $routes->post('resend_email', 'Email::resend_email', ['as' => 'user_resend_email']);
 });
 
 
@@ -124,6 +125,7 @@ $routes->group('dashboard', function($routes) {
         $routes->get('new', 'Passwords::new', ['as' => 'dashboard_password_new']);
         $routes->post('create', 'Passwords::create', ['as' => 'dashboard_password_create']);
         $routes->get('(:hash)', 'Passwords::show/$1', ['as' => 'dashboard_password_show']);
+        $routes->get('(:hash)/edit', 'Passwords::edit/$1', ['as' => 'dashboard_password_edit']);
         $routes->put('(:hash)', 'Passwords::update/$1', ['as' => 'dashboard_password_update']);
         $routes->delete('(:hash)', 'Passwords::delete/$1', ['as' => 'dashboard_password_delete']);
 
@@ -149,13 +151,14 @@ $routes->group('dashboard', function($routes) {
         $routes->group('me', function($routes) {
             $routes->get('/', 'Shared::index/me', ['as' => 'dashboard_shared_me']);
             $routes->get('(:hash)', 'Shared::show_me/$1', ['as' => 'dashboard_shared_me_show']);
-            $routes->get('(:hash)/edit', 'Shared::edit/$1', ['as' => 'dashboard_shared_edit']);
-
         });
         // Shared to others
         $routes->group('others', function($routes) {
             $routes->get('/', 'Shared::index/others', ['as' => 'dashboard_shared_others']);
             $routes->get('(:hash)', 'Shared::show_others/$1', ['as' => 'dashboard_shared_others_show']);
+            $routes->get('(:hash)/edit', 'Shared::edit/$1', ['as' => 'dashboard_shared_edit']);
+            $routes->put('/', 'Shared::update', ['as' => 'dashboard_shared_update']);
+            $routes->delete('(:hash)', 'Shared::delete/$1', ['as' => 'dashboard_shared_delete']);
 
         });
 
@@ -169,12 +172,14 @@ $routes->group('dashboard', function($routes) {
         $routes->get('/', 'Search::index', ['as' => 'dashboard_search']);
     });
 
+    // Websites
     $routes->group('websites', function($routes) {
         $routes->get('/', 'Websites::index', ['as' => 'dashboard_websites']);
         $routes->get('(:hash)/passwords', 'Websites::passwords/$1', ['as' => 'dashboard_website_passwords']);
-        $routes->get('(:hash)/edit', 'Websites::index', ['as' => 'dashboard_website_edit']);
-        $routes->put('(:hash)', 'Websites::update', ['as' => 'dashboard_website_update']);
-        $routes->delete('(:hash)', 'Websites::delete', ['as' => 'dashboard_website_delete']);
+        $routes->get('(:hash)', 'Websites::show/$1', ['as' => 'dashboard_show_edit']);
+        $routes->get('(:hash)/edit', 'Websites::edit/$1', ['as' => 'dashboard_website_edit']);
+        $routes->put('(:hash)', 'Websites::update/$1', ['as' => 'dashboard_website_update']);
+        $routes->delete('(:hash)', 'Websites::delete/$1', ['as' => 'dashboard_website_delete']);
     });
 
 });

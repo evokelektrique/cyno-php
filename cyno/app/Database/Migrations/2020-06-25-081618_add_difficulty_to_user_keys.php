@@ -19,6 +19,6 @@ class AddDifficultyToUserKeys extends Migration
 
 	public function down()
 	{
-		$this->forge->removeColumn('user_keys', 'difficulty');
+		$this->forge->dropColumn('user_keys', 'difficulty');
 	}
 }

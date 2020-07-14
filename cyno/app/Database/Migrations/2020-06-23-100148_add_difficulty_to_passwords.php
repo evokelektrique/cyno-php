@@ -19,6 +19,6 @@ class AddDifficultyToPasswords extends Migration
 
 	public function down()
 	{
-		$this->forge->removeColumn('passwords', 'difficulty');
+		$this->forge->dropColumn('passwords', 'difficulty');
 	}
 }

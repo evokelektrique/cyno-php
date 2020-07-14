@@ -127,11 +127,12 @@ class Passwords extends BaseController {
 			// Inputs data
 			$input_data = $this->request->getJSON();
 			$model_data = [
-				'salt' 			=> $input_data->salt,
-				'nonce' 		=> $input_data->nonce,
-				'cipher' 		=> $input_data->cipher,
-				'difficulty'	=> $input_data->difficulty,
-				'user_id' 		=> $this->session->user['id']
+				'title'      => $input_data->title,
+				'salt'       => $input_data->salt,
+				'nonce'      => $input_data->nonce,
+				'cipher'     => $input_data->cipher,
+				'difficulty' => $input_data->difficulty,
+				'user_id'    => $this->session->user['id']
 			];
 			if(strlen($input_data->folder_id) == 1) {
 				if($input_data->folder_id == 0) {
@@ -261,56 +262,57 @@ class Passwords extends BaseController {
 
 	}
 
-
-
-
-	public function delete($hash_id) {
+	public function edit($hash_id) {
 		$id = $this->hashids->decode($hash_id);
 		$password = $this->model
 			->where('id', $id)
 			->where('user_id', $this->session->user['id'])->first();
-		if(!empty($password)) {
-			$deleted_password = $this->model->delete($id);
-			if($deleted_password) {
-				return redirect()->back()->with('alert', [
-					'status' => 'SUCCESS',
-					'message' => 'password deleted'
-				]);
-			} else {
-				return redirect()->back()->with('alert', [
-					'status' => 'SUCCESS',
-					'message' => 'password not deleted'
-				]);
-			}
-		} else {
-			return redirect()->back()->with('alert', [
-				'status' => 'FAIL',
-				'message' => 'password not found'
+		// Password Not Found
+		if(empty($password)) {
+			return $this->response->setStatusCode(404, "Password Not Found");
+		}
+		$data = [
+			'session'  => $this->session,
+			'password' => $password,
+		];
+		return view('dashboard/passwords/edit', $data);
+	}
+
+
+
+	public function delete($hash_id) {
+		// Decode ID
+		$id = $this->hashids->decode($hash_id);
+
+		// Find Password
+		$password = $this->model
+			->where('id', $id)
+			->where('user_id', $this->session->user['id'])->first();
+			
+		// Password Not Found
+		if(empty($password)) {
+			return redirect('dashboard_folders')->with('alert', [
+				'status' => 0,
+				'message' => lang('cyno.password_not_found')
 			]);
 		}
 
-		// $categories = $this->category_model
-		// 	->select('*')
-		// 	->join('password_category', 'categories.hash_id = password_category.category_hash_id')
-		// 	->where('password_id', $_hash_id)
-		// 	->findAll();
-		// var_dump($categories);
-		// if(!empty($password)) {
-		// 	foreach($categories_hash_ids as &$cat_hash_id) {
-		// 		$cat = $this->category_model->select(['title', 'color', 'hash_id', 'is_default'])->where('hash_id' , $cat_hash_id->category_hash_id)->first();
-		// 		$this->password_category_model->delete($cat->id);
-		// 	}
-		// 	$this->model->delete($password->id);
-		// 	return redirect()->back()->with('alert', [
-		// 		'status' => 'SUCCESS',
-		// 		'message' => 'Password successfully deleted'
-		// 	]);
-		// } else {
-		// 	return redirect()->back()->with('alert', [
-		// 		'status'  => 'FAIL',
-		// 		'message' => 'Password unsuccessfully deleted'
-		// 	]);
-		// }
+		// Delete Password
+		$deleted_password = $this->model->delete($id);
+		
+		// Successfully Deleted
+		if($deleted_password) {
+			return redirect('dashboard_folders')->with('alert', [
+				'status' => 1,
+				'message' => lang('cyno.password_deleted')
+			]);
+		}
+
+		// Delete Operation Failed
+		return redirect('dashboard_folders')->with('alert', [
+			'status' => 0,
+			'message' => lang('cyno.password_not_deleted')
+		]);
 	}
 
 

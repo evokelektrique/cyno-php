@@ -2,7 +2,7 @@
 
 use CodeIgniter\Database\Migration;
 
-class AddNonceShared.php extends Migration
+class AddNonceShared extends Migration
 {
 	public function up()
 	{

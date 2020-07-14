@@ -20,6 +20,6 @@ class AddWebsiteIdToShared extends Migration
 
 	public function down()
 	{
-		$this->forge->dropColumn('shared', $fields);
+		$this->forge->dropColumn('shared', 'website_id');
 	}
 }

@@ -8,53 +8,67 @@
 		<?= $this->include('landing/partials/header') ?>
 		<div class="columns is-centered">
 				<div class="is-pulled-right column is-4">
+					<?php
+						$email_input = [
+							'name' 			=> 'user[email]',
+							'id' 			=> 'user_email',
+							'class'	 		=> 'input',
+							'value' 		=> old('user.email'),
+							'maxlength'	 	=> '100',
+							'type' 			=> 'email',
+							'placeholder' 	=> lang('cyno.email_placeholder'),
+						];		
+						$password_input = [
+							'name' => 'user[password]',
+							'id' 	=> 'password',
+							'class' => 'input',
+							'value' => '',
+							'maxlength' => '100',
+							'type' => 'password',
+							'placeholder' => lang('cyno.password_placeholder'),
+						];
+						$submit_input = [
+							'name' => 'submit',
+							'id' => 'submit',
+							'class' => 'button is-primary is-fullwidth',
+							'value' => lang('cyno.login'),
+							'type' => 'submit',
+						];
+					?>
+					<p class="title is-size-1 has-text-justified">
+						<?= lang('cyno.welcome_message') ?>
+					</p>
+					<?php if($session->has('email_not_verified')): ?>
+					<div class="content">
+						<div class="notification is-danger">
+							<button class="delete"></button>							
+							<strong><?= lang('cyno.email_not_verified') ?></strong>
+							<?= form_open(base_url(route_to('user_resend_email'))) ?>
+							<?= form_hidden('hash', $session->email_not_verified['hash']) ?>
+							<button class='button is-light'>
+								<?= lang('cyno.resend_email_button') ?>
+							</button>
+							<?= form_close() ?>
+						</div>
+					</div>
+					<?php endif; ?>
+					<?php if($session->has('validation')): ?>
+					<div class="content">
+						<div class="notification is-danger">
+							<button class="delete"></button>							
+							<?= $session->validation->listErrors() ?>
+						</div>
+					</div>
+					<?php endif; ?>
+					<?php if($session->has('alert')): ?>
+					<div class="content">
+						<div class="notification <?= ((int)$session->alert['status'] > 0) ? 'is-primary':'is-danger' ?> ">
+							<button class="delete"></button>							
+							<?= $session->alert['message'] ?>
+						</div>
+					</div>
+					<?php endif; ?>
 					<?= form_open(base_url(route_to('App\Controllers\Login::validation'))) ?>
-						<?php
-							$email_input = [
-								'name' 			=> 'user[email]',
-								'id' 			=> 'user_email',
-								'class'	 		=> 'input',
-								'value' 		=> old('user.email'),
-								'maxlength'	 	=> '100',
-								'type' 			=> 'email',
-								'placeholder' 	=> lang('cyno.email_placeholder'),
-							];		
-							$password_input = [
-								'name' => 'user[password]',
-								'id' 	=> 'password',
-								'class' => 'input',
-								'value' => '',
-								'maxlength' => '100',
-								'type' => 'password',
-								'placeholder' => lang('cyno.password_placeholder'),
-							];
-							$submit_input = [
-								'name' => 'submit',
-								'id' => 'submit',
-								'class' => 'button is-primary is-fullwidth',
-								'value' => lang('cyno.login'),
-								'type' => 'submit',
-							];
-						?>
-						<p class="title is-size-1 has-text-justified">
-							<?= lang('cyno.welcome_message') ?>
-						</p>
-						<?php if($session->has('validation')): ?>
-						<div class="content">
-							<div class="notification is-danger">
-								<button class="delete"></button>							
-								<?= $session->validation->listErrors() ?>
-							</div>
-						</div>
-						<?php endif; ?>
-						<?php if($session->has('alert')): ?>
-						<div class="content">
-							<div class="notification <?= ((int)$session->alert['status'] > 0) ? 'is-primary':'is-danger' ?> ">
-								<button class="delete"></button>							
-								<?= $session->alert['message'] ?>
-							</div>
-						</div>
-						<?php endif; ?>
 						<div class="field">
 							<label class="label"><?= lang('cyno.email') ?></label>
 							<div class="control">

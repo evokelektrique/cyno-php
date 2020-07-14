@@ -3,6 +3,14 @@
   <div class="modal-content">
   	<div class="box">
 		<?= form_open(base_url(route_to('App\Controllers\Passwords::create')), ['id' => 'encryption_form']) ?>
+		
+		<div class="field">
+			<label class="label"><?= lang('cyno.title') ?></label>
+			<div class="control">
+				<?= form_input('title', '', ['id' => 'password_title', 'class' => 'input']) ?>
+			</div>
+		</div>
+
 		<div class="field">
 			<label class="label"><?= lang('cyno.masterkey') ?></label>
 			<div class="control">
@@ -17,7 +25,7 @@
 			</div>
 		</div>
 
-		<div class="field ">
+		<div class="field">
 			<label class="label"><?= lang('cyno.password') ?></label>
 			<div class="control">
 				<?= form_password('cipher_text', '', ['id' => 'password', 'class' => 'input']) ?>

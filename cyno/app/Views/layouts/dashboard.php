@@ -10,14 +10,15 @@
 
 	<script type="text/javascript">
 	let ROUTES  = {
-	root: 								'<?= base_url(route_to('root')) ?>', 
-	dashboard: 							'<?= base_url(route_to('dashboard')) ?>',
-	dashboard_shared_create: 			'<?= base_url(route_to('dashboard_shared_create')) ?>',
-	dasbhoard_folder_create: 			'<?= base_url(route_to('dashboard_folder_create')) ?>',
-	dashboard_shared_decryption_bytes: 	'<?= base_url(route_to('dashboard_shared_decryption_bytes')) ?>',
-	dashboard_shared_get_bytes: 		'<?= base_url(route_to('dashboard_shared_get_bytes')) ?>',
-	dashboard_validation: 				'<?= base_url(route_to('dashboard_validation')) ?>',
-	dashboard_password_create: 			'<?= base_url(route_to('dashboard_password_create')) ?>',
+	root                             : '<?= base_url(route_to('root')) ?>',
+	dashboard                        : '<?= base_url(route_to('dashboard')) ?>',
+	dashboard_shared_create          : '<?= base_url(route_to('dashboard_shared_create')) ?>',
+	dashboard_shared_update          : '<?= base_url(route_to('dashboard_shared_update')) ?>',
+	dasbhoard_folder_create          : '<?= base_url(route_to('dashboard_folder_create')) ?>',
+	dashboard_shared_decryption_bytes: '<?= base_url(route_to('dashboard_shared_decryption_bytes')) ?>',
+	dashboard_shared_get_bytes       : '<?= base_url(route_to('dashboard_shared_get_bytes')) ?>',
+	dashboard_validation             : '<?= base_url(route_to('dashboard_validation')) ?>',
+	dashboard_password_create        : '<?= base_url(route_to('dashboard_password_create')) ?>',
 	}	
 	// console.log(STATICS);
 	</script>

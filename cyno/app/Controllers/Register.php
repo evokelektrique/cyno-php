@@ -47,7 +47,7 @@ class Register extends BaseController {
 			$data['user_id'] = $save;
 
 			// Events
-			$email = \CodeIgniter\Events\Events::trigger('user_registration', $data);
+			$email = \CodeIgniter\Events\Events::trigger('email_verification', $data);
 
 			// Validate email
 			if($email) {

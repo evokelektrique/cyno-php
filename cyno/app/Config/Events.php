@@ -50,25 +50,13 @@ Events::on('pre_system', function () {
     }
 });
 
-
-// Events::on('user_default_category', function($data) {
-//     // $category_model = new CategoryModel();
-//     // if(count($category_model->where('title', $data['title'])->where('user_id',$data['user_id'])->findAll()) == 0) {
-//     //     return $category_model->insert($data);
-//     // } else {
-//     //     return FALSE;
-//     // }
-// });
-
 // Send Verification Email
-Events::on('user_registration', function ($data) {
-
+Events::on('email_verification', function ($data) {
     $mail = new PHPMailer(true);
     $model = new EmailTokenModel();
     try {
-        $length = getenv('email.bytes_length');
-        $bytes 	= random_bytes($length);
-        $hash 	= bin2hex($bytes);
+        helper('text');
+        $hash 	= (!empty($data['hash'])) ? $data['hash'] : random_string('crypto', getenv('email.bytes_length'));
         $email_data = [
         	'hash' => $hash,
         	'user_id' => $data['user_id']
@@ -78,14 +66,14 @@ Events::on('user_registration', function ($data) {
 	        // Server settings
 	        // $mail->SMTPDebug = SMTP::DEBUG_OFF;
 	        $mail->isSMTP();
-	        $mail->Host = 'mail.cyno.ir';
+	        $mail->Host = getenv('email.host');
 	        $mail->SMTPAuth = true;
-	        $mail->Username = 'noreply@cyno.ir';
-	        $mail->Password = '1.Programmer@3412!1';
+	        $mail->Username = getenv('email.username');
+	        $mail->Password = getenv('email.password');
 	        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 	        $mail->Port = 587;
 
-	        $mail->setFrom('noreply@cyno.ir', 'Cyno');
+	        $mail->setFrom(getenv('email.username'), getenv('email.from'));
 	        $mail->addAddress($data['email']);
 	        $mail->isHTML(true);
 

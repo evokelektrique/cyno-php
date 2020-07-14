@@ -15,7 +15,11 @@
 		</td>
 		<td>-</td>
 		<td title="<?= $password->created_at ?>"><?= $time::parse($password->created_at)->humanize() ?></td>
-		<td><a href="<?= base_url(route_to('dashboard_password_show', $password->hash_id)) ?>">مشاهده</a></td>
+		<td class="has-text-left">
+			<a class="button is-small is-primary" href="<?= base_url(route_to('dashboard_password_show', $password->hash_id)) ?>"><?= lang('cyno.show') ?></a>
+			<a class="button is-small is-warning" href="<?= base_url(route_to('dashboard_password_edit', $password->hash_id)) ?>"><?= lang('cyno.edit') ?></a>
+		</td>
+
 	</tr>
 <?php endforeach; ?>
 

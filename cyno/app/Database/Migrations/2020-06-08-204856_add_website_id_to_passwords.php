@@ -20,6 +20,6 @@ class AddWebsiteIdToPasswords extends Migration
 
 	public function down()
 	{
-		$this->forge->dropColumn('passwords', $fields);
+		$this->forge->dropColumn('passwords', 'website_id');
 	}
 }

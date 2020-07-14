@@ -17,9 +17,10 @@
 	</h1>
 	<div class="py-5 has-text-centered" dir="ltr" id="shared_information">
 		<code>
-			<b>password_hash</b> => <?= substr($password->hash, 0,50) ?>...
+			<b>password_cipher</b> => <?= substr($password->cipher, 0,50) ?>...
 		</code>
 		<br>
+		<?php if(!empty($website)): ?>
 		<code>
 			<b>website_url</b> => <?= $website->url ?>
 			<br>
@@ -27,6 +28,7 @@
 			<br>
 			<b>fav_icon</b> => <img src="<?= $website->fav_icon_url ?>" width="10" height="10" />
 		</code>
+		<?php endif; ?>
 		<br>
 		<code>
 			From(<?= $sender_user->email ?>) => You(<?= $session->user['email'] ?>)
