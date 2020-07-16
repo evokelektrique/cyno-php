@@ -31,10 +31,18 @@ class Login extends Controller {
 
 	public function authenticate() {
 		$input_data = $this->request->getJSON();
+
+		// Find User
 		$user = $this->user_model->where('email', $input_data->email)->first();
 
+		// Check Empty
 		if(empty($user)) {
 			return json_encode(['status' => 0, 'message' => 'Invalid login - User doesn\' exist']);
+		}
+
+		// Check User Activation
+		if ((int)$user->is_activate === 0) {
+			return json_encode(['status' => 0, 'message' => 'User is deactivated']);
 		}
 
 		// $user_data = [
@@ -49,7 +57,7 @@ class Login extends Controller {
 
 			$jwt_id = $this->jwt_model->where('user_id', $user->id)->first();
 			if(empty($jwt_id)) {
-				$exp = date(strtotime('+2 years'));
+				$exp = date(strtotime('+1 year'));
 				$payload = array(
 					"iss" => base_url(),
 					"exp" => $exp,

@@ -3,6 +3,7 @@
 <head>
 	<!-- META-TAGS -->
 	<title>Authentication layout</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="<?= base_url('public/css/bulma-rtl.min.css') ?>">

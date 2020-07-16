@@ -26,3 +26,6 @@
 .table td, .table th {
     vertical-align: middle !important;
 }
+#passwords .password * {
+    align-items: center;
+}

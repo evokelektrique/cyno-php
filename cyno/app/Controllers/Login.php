@@ -40,9 +40,10 @@ class Login extends BaseController {
 		}
 
 		$user_data = [
-			'id'       => $user->id,
-			'email'    => $user->email,
-			'is_admin' => $user->is_admin,
+			'id'          => $user->id,
+			'email'       => $user->email,
+			'is_admin'    => $user->is_admin,
+			'is_activate' => (int)$user->is_activate,
 		];
 
 		// Decrypt Password

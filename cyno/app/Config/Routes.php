@@ -114,7 +114,9 @@ $routes->group('dashboard', function($routes) {
 	$routes->group('profile', function($routes) {
 		$routes->get('/', 'Profile::index', ['as' => 'dashboard_profile']);
         $routes->get('settings', 'Profile::settings', ['as' => 'dashboard_profile_settings']);
+        $routes->get('deactive', 'Profile::deactive', ['as' => 'dashboard_profile_deactive']);
         $routes->put('validate_settings', 'Profile::validate_settings');
+        $routes->post('validate_deactive', 'Profile::validate_deactive');
 		$routes->delete('logout', 'Profile::logout', ['as' => 'dashboard_profile_logout']);
 	});
 

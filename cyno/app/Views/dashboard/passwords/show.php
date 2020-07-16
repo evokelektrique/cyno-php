@@ -65,22 +65,20 @@
 				<div class="columns is-centered">
 					<div class="field column is-5 has-addons">
 						<div class="control">
-							<a class="has-icon button is-relative" id="share_options_menu_button">
+							<a class="has-icon button is-relative" id="copy_password">
 								<div class="icon">
-									<i class="fas fa-ellipsis-h"></i>
+									<i class="fas fa-copy"></i>
 								</div>
-								<ul id="share_options_menu" class="box">
-									<li>
-										<div id="share_password_button" class="is-hidden">
-											<?= lang('cyno.share') ?>
-										</div>
-									</li>
-								</ul>
 							</a>
 						</div>
 						<div class="control is-expanded">
 							<input class="input" type="text" value="" readonly id="decrypted_password_value" />
 						</div>
+					</div>
+					<div class="field column is-2 is-expanded">
+						<button id="share_password_button" class="button is-primary is-fullwidth is-hidden">
+							<?= lang('cyno.share') ?>
+						</button>
 					</div>
 				</div>
 			</div>

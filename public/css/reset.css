@@ -18,3 +18,12 @@ body, button, input, select, textarea {
 .align-baseline {
   vertical-align: baseline;
 }
+
+.text-opacity-50 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

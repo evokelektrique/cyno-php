@@ -279,6 +279,49 @@ class Passwords extends BaseController {
 	}
 
 
+	public function update($hash_id) {
+		// Decode ID
+		$id = $this->hashids->decode($hash_id);
+
+		// Incomming PUT Data
+		$input_data = [
+			'title' => $this->request->getPost('title'),
+		];
+
+		// Find Password
+		$password = $this->model
+			->where('id', $id)
+			->where('user_id', $this->session->user['id'])->first();
+
+		// Password Not Found
+		if (empty($password)) {
+			return redirect('dashboard_folders')->with('alert', [
+				'status' => 0,
+				'message' => lang('cyno.password_not_found')
+			]);
+		}
+
+		// Update Password
+		$updated_password = $this->model
+			->where('id', $id)
+			->where('user_id', $this->session->user['id'])
+			->set($input_data)
+			->update();
+
+		if($updated_password) {
+			return redirect()->back()->with('alert', [
+				'status'  => 1,
+				'message' => lang('cyno.password_updated')
+			]);
+		}
+
+		// Update Operation Failed
+		return redirect()->back()->with('alert', [
+			'status'  => 0,
+			'message' => lang('cyno.password_not_updated')
+		]);
+	}
+
 
 	public function delete($hash_id) {
 		// Decode ID

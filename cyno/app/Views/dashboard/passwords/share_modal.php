@@ -7,7 +7,7 @@
 				<div class="field">
 					<lable class="label"><?= lang('cyno.email') ?></lable>
 					<div class="control">
-						<?= form_input(['name' => 'user_email', 'type' => 'email', 'id' => 'user_email', 'placeholder' => 'Enter user email', 'class' => 'input', 'required' => '']) ?>
+						<?= form_input(['name' => 'user_email', 'type' => 'email', 'id' => 'user_email','class' => 'input', 'required' => '']) ?>
 					</div>
 				</div>
 				<div class="field">

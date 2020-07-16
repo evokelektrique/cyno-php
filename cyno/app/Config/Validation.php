@@ -70,6 +70,14 @@ class Validation
 			]
 		]
 	];
+	public $settings_errors = [
+		'password' => [
+			'required' => 'فیلد "رمز عبور" اجباری می باشد.'
+		],
+		'password_confirm' => [
+			'required' => 'فیلد "تکرار رمز عبور" اجباری می باشد.'
+		],
+	];
 
 	public $password_create = [
 		'masterkey' => [

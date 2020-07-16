@@ -92,6 +92,16 @@ return [
 	'password_not_found'   => 'رمز عبور پیدا نشد',
 	'password_deleted'     => 'رمز عبور با موفقیت حذف شد',
 	'password_not_deleted' => 'عملیات حذف رمز عبور با مشکل بر خورد',
+	'password_updated'     => 'رمز عبور با موفقیت بروز رسانی شد.',
+	'password_not_updated' => 'عملیات بروز رسانی با مشکل مواجه شد.',
 
-
+	// Profile
+	'profile_settings' => 'تنظیمات حساب کاربری',
+	'confirm_password' => 'تکرار رمز عبور',
+	'empty_fields_error' => 'فیلد های اجباری را پر کنید',
+	'change_password' => 'تغییر رمز عبور',
+	'deactive' => 'غیر فعال کردن',
+	'profile_deactive' => 'غیر فعال کردن حساب کاربری',
+	'deactive_description' => 'عملیات غیر فعال کردن حساب کاربری غیر قابل بازگشت می باشد.',
+	'profile_deactivated' => 'حساب کاربری شما غیر فعال شده است',
 ];

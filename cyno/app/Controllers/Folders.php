@@ -1,6 +1,5 @@
 <?php namespace App\Controllers;
 
-use CodeIgniter\Controller;
 use \App\Models\FolderModel;
 use \App\Models\PasswordModel;
 use Hashids\Hashids;

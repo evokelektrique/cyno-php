@@ -64,9 +64,13 @@
 			</div>
 		<?php endif; ?>
 		<?php if($session->has('errors')): ?>
+			<ul>
 			<?php foreach($session->errors as $key => $error): ?>
-				<?= $key ?> => <?= $error ?> <br>
+			<li class="has-text-danger">
+				* <?= $error ?>
+			</li>
 			<?php endforeach; ?>
+			</ul>
 		<?php endif; ?>
 	</div>
 </div>

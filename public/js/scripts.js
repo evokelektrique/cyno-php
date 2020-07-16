@@ -258,6 +258,7 @@ document.addEventListener("turbolinks:load", () => {
 			if(document.getElementById('share_password_button') != null) {
 				document.getElementById('share_password_button').addEventListener('click', function(e) {
 					e.preventDefault();
+					document.getElementById('share_password_button').classList.add('is-loading');
 					const share_modal = document.getElementById('share_modal');
 					e.preventDefault();
 					document.body.parentNode.classList.add('is-clipped')
@@ -305,6 +306,7 @@ document.addEventListener("turbolinks:load", () => {
 									csrf_token_cyno: document.getElementsByTagName('meta')["X-CSRF-TOKEN"].content
 								}).then(function(result) {
 									submit_share_button.classList.remove('is-loading');
+									document.getElementById('share_password_button').classList.remove('is-loading');
 									console.log(result); // DEBUG
 									update_csrf(result.csrf);
 								});
@@ -447,7 +449,17 @@ document.addEventListener("turbolinks:load", () => {
 			
 			function close_modal(element) {
 				element.target.parentNode.classList.toggle('is-active');
+				// console.log(element.target.parentNode.id); // DEBUG
+				switch(element.target.parentNode.id) {
+					case 'share_modal':
+					document.getElementById('share_password_button').classList.remove('is-loading');
+					break;
+					
+					default:
+					break;
+				}
 			}
+			
 			const modal_close_buttons = document.getElementsByClassName('modal-close');
 			const modal_backgrounds = document.getElementsByClassName('modal-background');
 			if(modal_close_buttons.length > 0 || modal_backgrounds.length > 0) {
@@ -496,8 +508,30 @@ document.addEventListener("turbolinks:load", () => {
 				});
 			});
 			
-			
-			
+			const copy_password_button = document.getElementById("copy_password");
+			if(copy_password_button !== null) {
+				copy_password_button.addEventListener('click', () => {
+					// Get the text field
+					var copy_password = document.getElementById("decrypted_password_value");
+					
+					// Select the text field
+					copy_password.select();
+					copy_password.setSelectionRange(0, 99999); // For mobile devices
+					
+					// Copy the text inside the text field
+					document.execCommand("copy");
+					
+					// Alert the copied text
+					alert("Copied the password: " + copy_password.value);
+				});
+			}
 			
 			
 		});
+		
+		function show_alert(message) {
+			if(!confirm(message)) {
+				return false;
+			}
+			return true;
+		}
