@@ -335,14 +335,14 @@ class Passwords extends BaseController {
 		// Decode folder ID
 		if(strlen($input_data['folder_id']) == 1) {
 			if($input_data['folder_id'] == 0) {
-				$input_data['folder_id'] = $input_data->folder_id;
+				$input_data['folder_id'] = $input_data['folder_id'];
 			} else {
 				return json_encode(['status' => 0, 'message' => 'Invalid folder_id']);
 			}
 		} else {
 			$input_data['folder_id'] = $this->hashids->decode($input_data['folder_id']);
 		}
-		
+
 		// Find Password
 		$password = $this->model
 			->where('id', $id)
