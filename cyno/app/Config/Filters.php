@@ -11,6 +11,7 @@ class Filters extends BaseConfig
 		'toolbar'  			=> \CodeIgniter\Filters\DebugToolbar::class,
 		'honeypot' 			=> \CodeIgniter\Filters\Honeypot::class,
 		'authentication' 	=> \App\Filters\Authentication::class,
+		'is_logged_in' 		=> \App\Filters\IsLoggedIn::class,
 		'keys' 				=> \App\Filters\Keys::class,
 		'jwtauth' 			=> \App\Filters\JWT_Auth::class
 	];
@@ -20,7 +21,8 @@ class Filters extends BaseConfig
 		'before' => [
 			//'honeypot'
 			// 'csrf',
-			'authentication' => ['except' => ['/','auth*','api*']],
+			'authentication' => ['except' => ['/', 'auth*', 'api*']],
+			'is_logged_in' => ['except' => ['/', 'dashboard*']],
 			'keys' => [
 				'dashboard*', 
 				'except' => [

@@ -1,8 +1,4 @@
 <?= $this->extend('layouts/authentication') ?>
-<?php if ($session->has('alert')) : ?>
-	<?= var_dump($session->alert) ?>
-<?php endif; ?>
-
 <?= $this->section('wrapper') ?>
 <div class="hero is-fullheight">
 	<?= $this->include('landing/partials/header') ?>

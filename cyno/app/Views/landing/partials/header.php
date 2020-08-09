@@ -25,7 +25,7 @@ $router = service('router');
 						<?= lang('cyno.dashboard') ?>
 					</a>
 				<?php endif; ?>
-				<?php else: ?>
+			<?php else: ?>
 				<?php if($router->controllerName() === "\App\Controllers\Landing"): ?>
 					<a class="navbar-item" href="<?= base_url(route_to('user_login')) ?>">
 						<?= lang('cyno.login') ?>

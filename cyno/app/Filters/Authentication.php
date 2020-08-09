@@ -15,6 +15,7 @@ class Authentication implements FilterInterface {
 				]);
 			}
 		}
+		
 		if($session->user['is_activate'] === 0) {
 			return redirect('user_login')->with('alert', [
 				'status' => 0,

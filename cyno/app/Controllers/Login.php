@@ -7,13 +7,13 @@ use App\Models\EmailTokenModel;
 
 // Login Class
 class Login extends BaseController {
+
 	public function index() {
 		$data = [
-			'session' => session()
+			'session' => $this->session,
 		];
 		return view('landing/login', $data);
 	}
-
 
 	public function validation() {
 		// Login inputs data
