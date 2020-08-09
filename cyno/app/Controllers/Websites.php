@@ -1,7 +1,4 @@
 <?php namespace App\Controllers;
-// Core
-use CodeIgniter\I18n\Time;
-
 // Models
 use App\Models\WebsiteModel;
 use App\Models\PasswordModel;
@@ -31,20 +28,32 @@ class Websites extends BaseController {
 			'session' => $this->session,
 			'websites' => $websites,
 			'password_model' => $this->password_model,
-			'time' => new Time(),
 		];
 		return view('dashboard/websites/index', $data);
 	}
 
 	public function passwords($hash_id) {
 		$id = $this->hashids->decode($hash_id);
+	
+		// Find Website
+		$website = $this->model
+			->where('id', $id)
+			->where('user_id', $this->session->user['id'])
+			->first();
+		
+		// Website Not Found
+		if(empty($website)) {
+			return $this->response->setStatusCode(404, "Website Not Found");
+		}
+
 		$passwords = $this->password_model->where('user_id', $this->session->user['id'])
 			->where('website_id', $id)
 			->findAll();
+
 		$data = [
 			'session' => $this->session,
 			'passwords' => $passwords,
-			'time' => new Time(),
+			'website' => $website,
 		];
 		return view('dashboard/websites/passwords', $data);
 	}
@@ -61,9 +70,9 @@ class Websites extends BaseController {
 			->where('user_id', $this->session->user['id'])
 			->first();
 		
-		// Password Not Found
+		// Website Not Found
 		if(empty($website)) {
-			return $this->response->setStatusCode(404, "Password Not Found");
+			return $this->response->setStatusCode(404, "Website Not Found");
 		}
 
 		$data = [
@@ -88,6 +97,18 @@ class Websites extends BaseController {
 		// Password Not Found
 		if(empty($website)) {
 			return $this->response->setStatusCode(404, "Password Not Found");
+		}
+
+		// Find website passwords
+		$website_passwords = $this->password_model
+			->where('website_id', $id)
+			->findAll();
+
+		// Deleting website passwords
+		foreach($website_passwords as &$password) {
+			$this->password_model
+				->where('id', $password->id)
+				->delete();
 		}
 
 		// Delete Website

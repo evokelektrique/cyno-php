@@ -37,12 +37,12 @@ class Login extends Controller {
 
 		// Check Empty
 		if(empty($user)) {
-			return json_encode(['status' => 0, 'message' => 'Invalid login - User doesn\' exist']);
+			return json_encode(['status' => 0, 'message' => lang('cyno.user_notfound')]);
 		}
 
 		// Check User Activation
 		if ((int)$user->is_activate === 0) {
-			return json_encode(['status' => 0, 'message' => 'User is deactivated']);
+			return json_encode(['status' => 0, 'message' => lang('cyno.profile_deactivated')]);
 		}
 
 		// $user_data = [
@@ -72,14 +72,14 @@ class Login extends Controller {
 				if($insert_id) {
 					return json_encode(['status' => 1, 'jwt' => $jwt_token]);
 				} else {
-					die(json_encode(['status' => 0, 'message' => 'Operation failed']));
+					die(json_encode(['status' => 0, 'message' => lang('cyno.operation_failed')]));
 				}
 			} else {
 				return json_encode(['status' => 1, 'jwt' => $jwt_id->token]);
 			}
 			
 		} else {
-			return json_encode(['status' => 0, 'message' => 'Invalid login']);
+			return json_encode(['status' => 0, 'message' => lang('cyno.wrong_password')]);
 		}
 
 

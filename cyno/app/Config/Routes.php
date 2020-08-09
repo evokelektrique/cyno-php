@@ -128,7 +128,8 @@ $routes->group('dashboard', function($routes) {
         $routes->post('create', 'Passwords::create', ['as' => 'dashboard_password_create']);
         $routes->get('(:hash)', 'Passwords::show/$1', ['as' => 'dashboard_password_show']);
         $routes->get('(:hash)/edit', 'Passwords::edit/$1', ['as' => 'dashboard_password_edit']);
-        $routes->put('(:hash)', 'Passwords::update/$1', ['as' => 'dashboard_password_update']);
+        $routes->put('(:hash)', 'Passwords::update/$1', ['as' => 'dashboard_password_update_information']);
+        $routes->put('/', 'Passwords::update_password', ['as' => 'dashboard_password_update']);
         $routes->delete('(:hash)', 'Passwords::delete/$1', ['as' => 'dashboard_password_delete']);
 
         // Ajax
@@ -178,7 +179,7 @@ $routes->group('dashboard', function($routes) {
     $routes->group('websites', function($routes) {
         $routes->get('/', 'Websites::index', ['as' => 'dashboard_websites']);
         $routes->get('(:hash)/passwords', 'Websites::passwords/$1', ['as' => 'dashboard_website_passwords']);
-        $routes->get('(:hash)', 'Websites::show/$1', ['as' => 'dashboard_show_edit']);
+        // $routes->get('(:hash)', 'Websites::show/$1', ['as' => 'dashboard_show_edit']);
         $routes->get('(:hash)/edit', 'Websites::edit/$1', ['as' => 'dashboard_website_edit']);
         $routes->put('(:hash)', 'Websites::update/$1', ['as' => 'dashboard_website_update']);
         $routes->delete('(:hash)', 'Websites::delete/$1', ['as' => 'dashboard_website_delete']);

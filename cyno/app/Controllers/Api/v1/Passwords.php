@@ -5,6 +5,7 @@ use App\Models\PasswordModel;
 use App\Models\SharedModel;
 use App\Models\WebsiteModel;
 use App\Models\InputModel;
+use App\Models\FolderModel;
 use App\Models\UserModel;
 use App\Models\KeysModel;
 use Hashids\Hashids;
@@ -26,6 +27,7 @@ class Passwords extends ApiController {
 		$this->shared_model 	= new SharedModel();
 		$this->website_model 	= new WebsiteModel();
 		$this->input_model		= new InputModel();
+		$this->folder_model		= new FolderModel();
 		$this->user_model		= new UserModel();
 		$this->hashids = new Hashids($_ENV["hashids.salt"], $_ENV["hashids.padding"]);
 	}
@@ -44,51 +46,54 @@ class Passwords extends ApiController {
 
 
 	public function search() {
-		$input_data = $this->request->getJSON();
-		$passwords = [];
+		try {
+			$input_data = $this->request->getJSON();
+			$passwords = [];
 
-		// Get domain
-		$website = $this->get_domain($input_data->url);
-		if(empty($website) || $website === NULL) {
-			return json_encode(['status' => 0, 'message' => 'website not found']);
+			// Get domain
+			$website = $this->get_domain($input_data->url);
+			if(empty($website) || $website === NULL) {
+				return json_encode(['status' => 0, 'message' => 'website not found']);
+			}
+			$single_passwords = $this->password_model
+				->select(['id', 'hash_id', 'hash', 'difficulty', 'folder_id', 'nonce', 'salt', 'cipher', 'created_at'])
+				->where('user_id', $this->user->user_id)
+				->where('inputs_preimage_hash', $input_data->inputs_preimage_hash)
+				->where('website_id', $website->id)
+				->findAll();
+
+			$shared_passwords = $this->shared_model
+				->select(['id', 'user_id', 'hash_id', 'hash', 'inputs_hash', 'inputs_preimage_hash', 'nonce', 'cipher', 'created_at'])
+				->where('receiver_id', $this->user->user_id)
+				->where('website_id', $website->id)
+				->findAll();
+
+			foreach($single_passwords as &$single_password) {
+				$passwords[] = [
+					'type' 		=> 'single',
+					'password' 	=> $single_password,
+					'inputs'   	=> $this->input_model->where('password_id', $single_password->id)->findAll(),
+					'website' 	=> $website
+				];
+			}
+			foreach($shared_passwords as &$shared_password) {
+				$temp_password_shared_from = $this->password_model
+					->where('hash', $shared_password->hash)
+					->where('inputs_hash', $shared_password->inputs_hash)
+					->where('inputs_preimage_hash', $shared_password->inputs_preimage_hash)
+					->first();
+				$passwords[] = [
+					'type' 		=> 'shared',
+					'password' 	=> $shared_password,
+					'inputs'   	=> $this->input_model->where('password_id', $temp_password_shared_from->id)->findAll(),
+					'website' 	=> $website,
+					'sender'	=> $this->user_model->select(['hash_id', 'email'])->where('id', $shared_password->user_id)->first(),
+				];
+			}
+			return json_encode($passwords);
+		} catch(\Exception $e) {
+			die($e);
 		}
-
-		$single_passwords = $this->password_model
-			->select(['id', 'hash_id', 'hash', 'difficulty', 'folder_id', 'nonce', 'salt', 'cipher', 'created_at'])
-			->where('user_id', $this->user->user_id)
-			->where('inputs_preimage_hash', $input_data->inputs_preimage_hash)
-			->where('website_id', $website->id)
-			->findAll();
-
-		$shared_passwords = $this->shared_model
-			->select(['id', 'user_id', 'hash_id', 'hash', 'inputs_hash', 'inputs_preimage_hash', 'nonce', 'cipher', 'created_at'])
-			->where('receiver_id', $this->user->user_id)
-			->where('website_id', $website->id)
-			->findAll();
-
-		foreach($single_passwords as &$single_password) {
-			$passwords[] = [
-				'type' 		=> 'single',
-				'password' 	=> $single_password,
-				'inputs'   	=> $this->input_model->where('password_id', $single_password->id)->findAll(),
-				'website' 	=> $website
-			];
-		}
-		foreach($shared_passwords as &$shared_password) {
-			$temp_password_shared_from = $this->password_model
-				->where('hash', $shared_password->hash)
-				->where('inputs_hash', $shared_password->inputs_hash)
-				->where('inputs_preimage_hash', $shared_password->inputs_preimage_hash)
-				->first();
-			$passwords[] = [
-				'type' 		=> 'shared',
-				'password' 	=> $shared_password,
-				'inputs'   	=> $this->input_model->where('password_id', $temp_password_shared_from->id)->findAll(),
-				'website' 	=> $website,
-				'sender'	=> $this->user_model->select(['hash_id', 'email'])->where('id', $shared_password->user_id)->first(),
-			];
-		}
-		echo json_encode($passwords);
 	}
 
 
@@ -106,9 +111,23 @@ class Passwords extends ApiController {
 			try {
 				// Inputs data
 				$input_data = $this->request->getJSON(true);
+				
+				// Decode folder ID
+				if(is_integer($input_data['folder_id'])) {
+					$folder_id = $input_data['folder_id'];
+				} else {
+					$folder_id = $this->hashids->decode($input_data['folder_id']);
+				}
+
+				// Check if folder is deleted
+				$folder = $this->folder_model->find($folder_id);
+				if(empty($folder)) {
+					// Set folder ID to root
+					$folder_id = 0;
+				}
 				$password_model_data = [
 					'cipher' 				=> $input_data['cipher'],
-					'folder_id' 			=> (int)$input_data['folder_id'], // remove (int) after hashids decode
+					'folder_id' 			=> $folder_id,
 					'user_id' 				=> $this->user->user_id,
 					'nonce' 				=> $input_data['nonce'],
 					'salt' 					=> $input_data['salt'],
@@ -118,9 +137,7 @@ class Passwords extends ApiController {
 					'difficulty' 			=> $input_data['difficulty'],
 				];
 
-				///////////////////
-				// Check Website //
-				///////////////////
+				// Check Website
 				$tab = $input_data['analytics']['tab'];
 				$website_data_check = [
 					'user_id' 		=> $this->user->user_id,
@@ -146,9 +163,7 @@ class Passwords extends ApiController {
 				}
 				$password_model_data['website_id'] = $website_id;
 
-				////////////////////
-				// Check Password //
-				////////////////////
+				// Check Password
 				// $password = $this->password_model
 				// ->where([
 				// 	// 'hash' => $input_data['hash'],
@@ -190,8 +205,8 @@ class Passwords extends ApiController {
 						// 	]);
 					}
 				}
-				echo json_encode(['message' => "success"]);
-			} catch (Exception $e) {
+				return json_encode(['message' => "success"]);
+			} catch (\Exception $e) {
 				die($e->getMessage());
 			}
 		// } else {
@@ -265,7 +280,7 @@ class Passwords extends ApiController {
 		$domain = preg_replace('/^www\./', '', $urlParts['host']);
 
 		// Find website
-		$website = $this->website_model->like('url', $domain)->first();
+		$website = $this->website_model->where('user_id', $this->user->user_id)->like('url', $domain)->first();
 		return $website;
 	}
 

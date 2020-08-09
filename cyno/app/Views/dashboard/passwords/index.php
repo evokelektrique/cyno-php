@@ -1,6 +1,9 @@
 
 <!-- Passwords -->
-
+<?php 
+// Initiate Carbon
+use Carbon\Carbon;
+?>
 <?php foreach($passwords as $password): ?>
 	<tr id='password-<?=$password->hash_id?>'>
 		<td><i class="fas fa-fingerprint fa-lg"></i></td>
@@ -14,7 +17,7 @@
 			</a>
 		</td>
 		<td>-</td>
-		<td title="<?= $password->created_at ?>"><?= $time::parse($password->created_at)->humanize() ?></td>
+		<td title="<?= $password->created_at ?>"><?= Carbon::parse($password->created_at)->locale('fa_IR')->diffForHumans() ?></td>
 		<td class="has-text-left">
 			<a class="button is-small is-primary" href="<?= base_url(route_to('dashboard_password_show', $password->hash_id)) ?>"><?= lang('cyno.show') ?></a>
 			<a class="button is-small is-warning" href="<?= base_url(route_to('dashboard_password_edit', $password->hash_id)) ?>"><?= lang('cyno.edit') ?></a>

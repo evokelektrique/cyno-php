@@ -10,7 +10,8 @@
 		"hashids/hashids": "^4.0",
 		"phpmailer/phpmailer": "^6.1",
 		"spatie/async": "^1.4",
-		"firebase/php-jwt": "^5.2"
+		"firebase/php-jwt": "^5.2",
+		"nesbot/carbon": "^2.38"
 	},
 	"require-dev": {
 		"mikey179/vfsstream": "1.6.*",

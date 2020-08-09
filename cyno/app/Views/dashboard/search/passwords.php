@@ -9,11 +9,13 @@
 	<div class="column is-10">
 		<h1><?= lang('cyno.passwords') ?></h1>
 		<?= $this->include('dashboard/partials/search') ?>
-		<table class="table is-hoverable is-fullwidth">
-			<tbody>
-				<?= $this->include('dashboard/passwords/index') ?>
-			</tbody>
-		</table>
+		<div class="table-container">
+			<table class="table is-hoverable is-fullwidth">
+				<tbody>
+					<?= $this->include('dashboard/passwords/index') ?>
+				</tbody>
+			</table>
+		</div>
 		<?php if (empty($passwords)) : ?>
 			<?= lang('cyno.no_result') ?>
 		<?php endif; ?>

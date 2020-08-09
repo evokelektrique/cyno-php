@@ -6,24 +6,27 @@
 
 // Core
 use CodeIgniter\Controller;
-use CodeIgniter\I18n\Time;
 
 // Models
 use \App\Models\PasswordModel;
+use \App\Models\WebsiteModel;
 use \App\Models\FolderModel;
 
 // Third-Party
 use Hashids\Hashids;
+// use Carbon\Carbon;
 
 class Passwords extends BaseController {
 
 	protected $model;
-	protected $category_model;
 	protected $hashids;
+	protected $folder_model;
+	protected $website_model;
 
 	public function __construct() {
 		$this->model = new PasswordModel();
 		$this->folder_model = new FolderModel();
+		$this->website_model = new WebsiteModel();
 		$this->hashids = new Hashids($_ENV["hashids.salt"], $_ENV["hashids.padding"]);
 	}
 
@@ -138,12 +141,12 @@ class Passwords extends BaseController {
 				if($input_data->folder_id == 0) {
 					$model_data['folder_id'] = $input_data->folder_id;
 				} else {
-					return json_encode(['status' => "fail"]);
+					return json_encode(['status' => 0, 'message' => 'Invalid folder_id']);
 				}
 			} else {
 				$model_data['folder_id'] = $this->hashids->decode($input_data->folder_id);
 			}
-			// $insert_id = false;
+
 			$insert_id = $this->model->insert($model_data);
 			$response = [];
 			if($insert_id) {
@@ -155,7 +158,7 @@ class Passwords extends BaseController {
 			}
 			$response['csrf'] = csrf_hash();
 
-			echo json_encode($response);
+			return json_encode($response);
 
 		// // Validation data
 		// $validation = \Config\Services::validation();
@@ -263,22 +266,62 @@ class Passwords extends BaseController {
 	}
 
 	public function edit($hash_id) {
+		// Include helpers
+		helper('text');
+
 		$id = $this->hashids->decode($hash_id);
 		$password = $this->model
 			->where('id', $id)
 			->where('user_id', $this->session->user['id'])->first();
+
 		// Password Not Found
 		if(empty($password)) {
 			return $this->response->setStatusCode(404, "Password Not Found");
 		}
-		$data = [
+
+		// Register view variables
+		$data = [];
+
+		// Find folder
+		$folders = $this->folder_model
+			->select('*')
+			->where('parent_id', 0)
+			->where('user_id', $this->session->user['id'])
+			->findAll();
+		$multiselect_folders = array_column($folders, 'title', 'hash_id');
+		if((int)$password->folder_id !== 0) {
+			$folder = $this->folder_model
+				->select('*')
+				->where('user_id', $this->session->user['id'])
+				->where('id', (int)$password->folder_id)
+				->first();
+			$data['folder'] = $folder;
+		}
+		$multiselect_folders[0] = 'Root'; // Root folder
+
+		// Difficulties
+		$difficulty_options = [
+			'0' => lang('cyno.difficulty_interactive'), 
+			'1' => lang('cyno.difficulty_moderate'), 
+			'2' => lang('cyno.difficulty_sensitive'), 
+		];
+
+		// Find Website
+		$website = !empty($password->website_id) ? $this->website_model->find($password->website_id) : null;
+
+		$data += [
 			'session'  => $this->session,
 			'password' => $password,
+			'password_model' => $this->model,
+			'website' => $website,
+			'multiselect_folders' => $multiselect_folders,
+			'difficulty_options' => $difficulty_options,
 		];
 		return view('dashboard/passwords/edit', $data);
 	}
 
 
+	// Update Password Information (title, ...)
 	public function update($hash_id) {
 		// Decode ID
 		$id = $this->hashids->decode($hash_id);
@@ -286,8 +329,20 @@ class Passwords extends BaseController {
 		// Incomming PUT Data
 		$input_data = [
 			'title' => $this->request->getPost('title'),
+			'folder_id' => $this->request->getPost('folder'),
 		];
-
+	
+		// Decode folder ID
+		if(strlen($input_data['folder_id']) == 1) {
+			if($input_data['folder_id'] == 0) {
+				$input_data['folder_id'] = $input_data->folder_id;
+			} else {
+				return json_encode(['status' => 0, 'message' => 'Invalid folder_id']);
+			}
+		} else {
+			$input_data['folder_id'] = $this->hashids->decode($input_data['folder_id']);
+		}
+		
 		// Find Password
 		$password = $this->model
 			->where('id', $id)
@@ -320,6 +375,43 @@ class Passwords extends BaseController {
 			'status'  => 0,
 			'message' => lang('cyno.password_not_updated')
 		]);
+	}
+
+	// Update Password (hash, ...)
+	public function update_password() {
+
+		// Inputs data
+		$input_data = $this->request->getJSON();
+
+		// Decode ID
+		$id = $this->hashids->decode($input_data->password_id);
+
+		$model_data = [
+			'salt'       => $input_data->salt,
+			'nonce'      => $input_data->nonce,
+			'cipher'     => $input_data->cipher,
+			'difficulty' => $input_data->difficulty,
+			'user_id'    => $this->session->user['id']
+		];
+
+		// Update password
+		$updated_password = $this->model
+			->where('id', $id)
+			->where('user_id', $this->session->user['id'])
+			->set($model_data)
+			->update();
+
+		$response = [];
+		if($updated_password) {
+			$response['message'] = "success";
+			$response['cipher'] = $input_data->cipher;
+			$response['request'] = json_encode($input_data);
+		} else {
+			$response['message'] = "failed";
+		}
+		$response['csrf'] = csrf_hash();
+
+		return json_encode($response);
 	}
 
 

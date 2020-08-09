@@ -3,7 +3,6 @@
 use \App\Models\FolderModel;
 use \App\Models\PasswordModel;
 use Hashids\Hashids;
-use CodeIgniter\I18n\Time;
 
 class Dashboard extends BaseController {
 
@@ -54,7 +53,6 @@ class Dashboard extends BaseController {
 			'default_folder'      => $default_folder,
 			'passwords'           => $passwords,
 			'difficulty_options'  => $difficulty_options,
-			'time' => new Time(),
 		];
 		return view('dashboard/index', $data);
 	}

@@ -1,3 +1,8 @@
+<?php
+// Initiate Carbon
+use Carbon\Carbon;
+?>
+
 <?php foreach($folders as &$folder): ?>
 	<tr id='folder-<?=$folder->hash_id?>'>
 		<td><i class="fas fa-folder fa-lg"></i></td>
@@ -8,7 +13,7 @@
 				->where('folder_id', $folder->id)
 				->countAllResults() ?>
 			<?= lang('cyno.pass') ?></td>
-		<td title="<?= $folder->created_at ?>"><?= $time::parse($folder->created_at)->humanize() ?></td>
+		<td title="<?= $folder->created_at ?>"><?= Carbon::parse($folder->created_at)->locale('fa_IR')->diffForHumans() ?></td>
 		<td class="has-text-left">
 			<a class="button is-small is-primary" href="<?= base_url(route_to('dashboard_folder_show', $folder->hash_id)) ?>"><?= lang('cyno.show') ?></a>
 			<a class="button is-small is-warning" href="<?= base_url(route_to('dashboard_folder_edit', $folder->hash_id)) ?>"><?= lang('cyno.edit') ?></a>

@@ -29,12 +29,14 @@
 		<!-- Passwords -->
 		<?= $this->include('dashboard/passwords/new') ?>
 		<div class="columns is-multiline is-centered">
-			<table class="table is-fullwidth is-hoverable">
-				<tbody>
-					<?= $this->include('dashboard/folders/list')?>
-					<?= $this->include('dashboard/passwords/index') ?>
-				</tbody>
-			</table>
+			<div class="table-container">
+				<table class="table is-fullwidth is-hoverable">
+					<tbody>
+						<?= $this->include('dashboard/folders/list')?>
+						<?= $this->include('dashboard/passwords/index') ?>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>

@@ -20,6 +20,14 @@ html, body, button, input, select, textarea {
   vertical-align: baseline;
 }
 
+.align-middle {
+  vertical-align: middle;
+}
+
+.align-self-center {
+  align-self: center;
+}
+
 .text-opacity-50 {
   color: rgba(255, 255, 255, 0.5);
 }
@@ -27,4 +35,12 @@ html, body, button, input, select, textarea {
 .text-ellipsis {
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+#header-navigation .navbar-burger {
+    color: #fff;
+    background-color: #1275a3;
+}
+#header-navigation .navbar-burger:hover {
+    background-color: rgb(18 117 163 / 80%);
+    color: white;
 }

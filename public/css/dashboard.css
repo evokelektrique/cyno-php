@@ -29,3 +29,10 @@
 #passwords .password * {
     align-items: center;
 }
+#nav-menu,
+.navbar-menu-center {
+    place-content: center;
+}
+.table-container {
+    width: 100%;
+}

@@ -1,7 +1,10 @@
+<?php 
+// Initiate Carbon
+use Carbon\Carbon;
+?>
 <?= $this->extend('layouts/dashboard') ?>
 
 <?= $this->section('wrapper') ?>
-
 <?= $this->include('dashboard/partials/header') ?>
 
 <div class="columns is-centered px-3">
@@ -50,7 +53,7 @@
 								<span class="icon is-small">
 									<i class="fas fa-sm fa-clock"></i>
 								</span>
-								<?= $time::parse($password->updated_at)->humanize() ?>
+								<?= Carbon::parse($password->updated_at)->locale('fa_IR')->diffForHumans();  ?>
 							</div>
 							<div class="column has-text-left pl-0">
 								<a href="<?= base_url(route_to('dashboard_password_show', $password->hash_id)) ?>" class="has-text-white"><?= lang('cyno.show_more') ?>
@@ -60,11 +63,6 @@
 								</a>
 							</div>
 						</div>
-						<!-- 			<?= form_open(route_to('App\Controllers\Passwords::delete', $password->hash_id), ['style' => 'display: inline-block']) ?>
-						<?= form_hidden('_method', 'DELETE') ?>
-						<?= form_submit('delete', 'DELETE!', ['class' => 'button is-small is-danger']) ?>
-					<?= form_close() ?>	
-		 -->
 					</div>
 				</div>
 			<?php endforeach; ?>

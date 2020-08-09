@@ -55,6 +55,7 @@ return [
 	'title'                      => 'عنوان',
 	'url'                        => 'آدرس',
 	'created_at'                 => 'تاریخ ساخت',
+	'updated_at'                 => 'تاریخ بروز رسانی',
 	'no_title'                   => 'بدون عنوان',
 	'share'                      => 'اشتراک گذاری',
 	'no_result'                  => 'موردی یافت نشد',
@@ -88,12 +89,26 @@ return [
 	'no_password_message'  => 'رمزی پیدا نشد',
 	'cannot_edit'          => 'غیر قابل ویرایش',
 	'cannot_edit_message'  => 'رمز های مستقل قابلیت ویرایش ندارند',
+	'edit_warning'          => 'هشدار ویرایش',
+	'edit_warning_message'  => 'با انجام عملیات تغییر رمز عبور شامل تغییر رمز عبور شما در (دیتابیس) سایت  مربوط نمی باشد',
 	'more_info'            => 'اطلاعات بیشتر',
 	'password_not_found'   => 'رمز عبور پیدا نشد',
 	'password_deleted'     => 'رمز عبور با موفقیت حذف شد',
 	'password_not_deleted' => 'عملیات حذف رمز عبور با مشکل بر خورد',
 	'password_updated'     => 'رمز عبور با موفقیت بروز رسانی شد.',
 	'password_not_updated' => 'عملیات بروز رسانی با مشکل مواجه شد.',
+	'advanced' => 'پیشرفته',
+	'info' => 'اطلاع',
+	'information' => 'اطلاعات',
+	'details' => 'جزعیات',
+	'password_details' => 'جزعیات  رمز',
+	'hash'	=> 'هش',
+	'salt'	=> 'نمک',
+	'nonce'	=> 'رمز یکبار مصرف',
+	'number' => 'عدد',
+	'confirm_delete' => 'آیا از حذف مطمعنید ؟',
+	'change_pass' => 'تغییر رمز',
+	'change_information' => 'تغییر اطلاعات',
 
 	// Profile
 	'profile_settings' => 'تنظیمات حساب کاربری',
@@ -104,4 +119,15 @@ return [
 	'profile_deactive' => 'غیر فعال کردن حساب کاربری',
 	'deactive_description' => 'عملیات غیر فعال کردن حساب کاربری غیر قابل بازگشت می باشد.',
 	'profile_deactivated' => 'حساب کاربری شما غیر فعال شده است',
+
+	// Website
+	'website_updated'     => 'وبسایت با موفقیت بروز رسانی شد.',
+	'website_deleted'     => 'وبسایت با موفقیت حذف شد.',
+	'website_not_deleted' => 'حذف وبسایت با مشکل مواجه شد.',
+	'website_not_updated' => 'بروز رسانی وب سایت با مشکل مواجه شد.',
+	'address' => 'آدرس',
+
+	// Common
+	'operation_failed' => 'عملیات نا موفق بود',
+
 ];
